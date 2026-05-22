@@ -13,7 +13,7 @@ from .coordinator import CregCoordinator, MonthData
 _DEVICE_INFO = DeviceInfo(
     identifiers={(DOMAIN, DOMAIN)},
     name="CREG Tariff",
-    manufacturer="CREG",
+    manufacturer="thomasgodon",
     configuration_url=(
         "https://www.creg.be/nl/consumenten/prijzen-en-tarieven"
         "/creg-tarief-voor-terugbetaling-thuisladen-bedrijfswagens"
