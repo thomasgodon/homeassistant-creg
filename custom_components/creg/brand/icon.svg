@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <!-- Background: dark rounded square (14% corner radius) -->
+  <rect width="256" height="256" rx="36" ry="36" fill="#1A1A1A"/>
+
+  <!-- Main wordmark: CR + bolt + G (bolt replaces the E in CREG) -->
+  <!-- Approximate positions for Segoe UI Black / Arial Black at 75px -->
+  <text x="40" y="134"
+        font-family="'Inter','Segoe UI Black','Arial Black',system-ui,sans-serif"
+        font-size="75" font-weight="900" fill="#4CAF50">CR</text>
+
+  <!-- Lightning bolt — FontAwesome bolt polygon, scaled to 27×54 at (132, 80) -->
+  <!-- Normalized: (0.75,0),(0,0.438),(0.417,0.438),(0.25,1),(1,0.563),(0.583,0.563) -->
+  <polygon points="
+    152.25,80
+    132,103.65
+    143.26,103.65
+    138.75,134
+    159,110.40
+    147.74,110.40
+  " fill="#4CAF50"/>
+
+  <!-- G -->
+  <text x="163" y="134"
+        font-family="'Inter','Segoe UI Black','Arial Black',system-ui,sans-serif"
+        font-size="75" font-weight="900" fill="#4CAF50">G</text>
+
+  <!-- Underline (thin green bar below wordmark) -->
+  <rect x="40" y="144" width="175" height="2" fill="#4CAF50"/>
+
+  <!-- Subtitle -->
+  <text x="128" y="172"
+        font-family="'Inter','Segoe UI Black','Arial Black',system-ui,sans-serif"
+        font-size="21" font-weight="700" fill="#FFFFFF"
+        text-anchor="middle" letter-spacing="4">TARIFF</text>
+</svg>

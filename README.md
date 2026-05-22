@@ -1,5 +1,7 @@
 # CREG Tariff — Home Assistant Integration
 
+<img src="custom_components/creg/brand/icon.png" alt="CREG Tariff logo" width="64" align="right"/>
+
 Home Assistant custom integration that exposes the official [CREG](https://www.creg.be) home-charging reimbursement tariffs for company electric vehicles in Belgium.
 
 Data source: [CREG — Tarief voor terugbetaling thuisladen bedrijfswagens](https://www.creg.be/nl/consumenten/prijzen-en-tarieven/creg-tarief-voor-terugbetaling-thuisladen-bedrijfswagens)
@@ -78,6 +80,14 @@ template:
 - Flanders uses the **digital meter** rate; Brussels and Wallonia use the **classic meter** rate — matching the CSV columns.
 - The 3-month average is computed by CREG using a 2-month delay (`M-2` to `M-4`), ensuring all regional network tariff data is available.
 - All values are all-in (energy cost + network cost + levies + surcharges + VAT).
+
+## Branding
+
+Brand assets live in `custom_components/creg/brand/`:
+- `icon.svg` — source design (Pillow-rendered via `render_icons.py`)
+- `icon.png` / `icon@2x.png` — 256×256 and 512×512 raster exports
+
+To regenerate the PNGs after editing the Python render script: `python custom_components/creg/brand/render_icons.py`
 
 ## Attribution
 
