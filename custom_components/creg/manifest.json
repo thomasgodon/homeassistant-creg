@@ -1,0 +1,12 @@
+{
+  "domain": "creg",
+  "name": "CREG Tariff",
+  "codeowners": ["@thomasgodon"],
+  "config_flow": true,
+  "documentation": "https://github.com/thomasgodon/homeassistant-creg",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/thomasgodon/homeassistant-creg/issues",
+  "requirements": [],
+  "single_config_entry": true,
+  "version": "0.1.0"
+}

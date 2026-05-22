@@ -1,0 +1,14 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "CREG Tariff",
+        "description": "Add the CREG home-charging reimbursement tariff integration. Tariffs are fetched from the official CREG website every 6 hours."
+      }
+    },
+    "abort": {
+      "already_configured": "CREG Tariff is already configured.",
+      "single_instance_allowed": "Only one CREG Tariff integration can be configured."
+    }
+  }
+}
