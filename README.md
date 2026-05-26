@@ -12,7 +12,7 @@ Tariffs are fetched every 6 hours from the official CREG CSV file.
 
 ## Sensors
 
-Six sensors are created, grouped under a single **CREG Tariff** device:
+Seven sensors are created, grouped under a single **CREG Tariff** device:
 
 | Entity ID | Description |
 |---|---|
@@ -22,6 +22,7 @@ Six sensors are created, grouped under a single **CREG Tariff** device:
 | `sensor.creg_tariff_flanders_avg_3m` | Latest official CREG 3-month average tariff for Flanders (c€/kWh) |
 | `sensor.creg_tariff_brussels_avg_3m` | Latest official CREG 3-month average tariff for Brussels (c€/kWh) |
 | `sensor.creg_tariff_wallonia_avg_3m` | Latest official CREG 3-month average tariff for Wallonia (c€/kWh) |
+| `sensor.creg_tariff_last_updated` | Timestamp of the most recent successful CSV download (diagnostic) |
 
 ### Price sensors (`sensor.creg_tariff_*`)
 
@@ -30,6 +31,10 @@ State: latest available monthly End-user Price EV in `c€/kWh`.
 Attributes:
 - `data` — full parsed dataset (all months, all regions) as a list of objects
 - `latest_year` / `latest_month` — year and month of the latest data point
+
+### Last updated sensor (`sensor.creg_tariff_last_updated`)
+
+State: timestamp of the most recent successful CSV download (tz-aware UTC). HA renders it as relative time (e.g. "2 hours ago"). Appears in the **Diagnostic** section of the device card. Returns `unknown` before the first successful refresh.
 
 ### Avg 3M sensors (`sensor.creg_tariff_*_avg_3m`)
 

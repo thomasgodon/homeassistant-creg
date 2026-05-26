@@ -9,7 +9,7 @@ import aiohttp
 
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+from homeassistant.helpers.update_coordinator import TimestampDataUpdateCoordinator, UpdateFailed
 
 from .const import CSV_URL, DOMAIN, SCAN_INTERVAL
 
@@ -77,7 +77,7 @@ def _parse_csv(text: str) -> list[MonthData]:
     return rows
 
 
-class CregCoordinator(DataUpdateCoordinator[list[MonthData]]):
+class CregCoordinator(TimestampDataUpdateCoordinator[list[MonthData]]):
     def __init__(self, hass: HomeAssistant) -> None:
         super().__init__(
             hass,

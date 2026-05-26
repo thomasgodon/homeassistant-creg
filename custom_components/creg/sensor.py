@@ -1,9 +1,12 @@
 from __future__ import annotations
 
-from homeassistant.components.sensor import SensorEntity, SensorStateClass
+from datetime import datetime
+
+from homeassistant.components.sensor import SensorDeviceClass, SensorEntity, SensorStateClass
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.device_registry import DeviceInfo
+from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
@@ -27,10 +30,11 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     coordinator: CregCoordinator = hass.data[DOMAIN][entry.entry_id]
-    entities: list[CregPriceSensor | CregAvg3mSensor] = []
+    entities: list[SensorEntity] = []
     for region in REGIONS:
         entities.append(CregPriceSensor(coordinator, region))
         entities.append(CregAvg3mSensor(coordinator, region))
+    entities.append(CregLastUpdatedSensor(coordinator))
     async_add_entities(entities)
 
 
@@ -99,3 +103,16 @@ class CregAvg3mSensor(CoordinatorEntity[CregCoordinator], SensorEntity):
         if result is None:
             return {}
         return {"period_year": result.year, "period_month": result.month}
+
+
+class CregLastUpdatedSensor(CoordinatorEntity[CregCoordinator], SensorEntity):
+    _attr_device_class = SensorDeviceClass.TIMESTAMP
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
+    _attr_has_entity_name = False
+    _attr_device_info = _DEVICE_INFO
+    _attr_unique_id = "creg_tariff_last_updated"
+    _attr_name = "CREG Tariff Last Updated"
+
+    @property
+    def native_value(self) -> datetime | None:
+        return self.coordinator.last_update_success_time
