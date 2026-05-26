@@ -12,16 +12,19 @@ Tariffs are fetched every 6 hours from the official CREG CSV file.
 
 ## Sensors
 
-Seven sensors are created, grouped under a single **CREG Tariff** device:
+Ten sensors are created, grouped under a single **CREG Tariff** device:
 
 | Entity ID | Description |
 |---|---|
 | `sensor.creg_tariff_flanders` | Latest monthly End-user Price EV for Flanders (c€/kWh) |
 | `sensor.creg_tariff_brussels` | Latest monthly End-user Price EV for Brussels (c€/kWh) |
 | `sensor.creg_tariff_wallonia` | Latest monthly End-user Price EV for Wallonia (c€/kWh) |
-| `sensor.creg_tariff_flanders_avg_3m` | Latest official CREG 3-month average tariff for Flanders (c€/kWh) |
-| `sensor.creg_tariff_brussels_avg_3m` | Latest official CREG 3-month average tariff for Brussels (c€/kWh) |
-| `sensor.creg_tariff_wallonia_avg_3m` | Latest official CREG 3-month average tariff for Wallonia (c€/kWh) |
+| `sensor.creg_tariff_flanders_avg_3m` | Latest published CREG 3-month average tariff for Flanders (c€/kWh) |
+| `sensor.creg_tariff_brussels_avg_3m` | Latest published CREG 3-month average tariff for Brussels (c€/kWh) |
+| `sensor.creg_tariff_wallonia_avg_3m` | Latest published CREG 3-month average tariff for Wallonia (c€/kWh) |
+| `sensor.creg_tariff_flanders_this_quarter` | CREG 3-month average applicable to the current calendar quarter for Flanders (c€/kWh) |
+| `sensor.creg_tariff_brussels_this_quarter` | CREG 3-month average applicable to the current calendar quarter for Brussels (c€/kWh) |
+| `sensor.creg_tariff_wallonia_this_quarter` | CREG 3-month average applicable to the current calendar quarter for Wallonia (c€/kWh) |
 | `sensor.creg_tariff_last_updated` | Timestamp of the most recent successful CSV download (diagnostic) |
 
 ### Price sensors (`sensor.creg_tariff_*`)
@@ -38,10 +41,21 @@ State: timestamp of the most recent successful CSV download (tz-aware UTC). HA r
 
 ### Avg 3M sensors (`sensor.creg_tariff_*_avg_3m`)
 
-State: the most recently published official CREG 3-month average tariff in `c€/kWh`. This is the value used by employers to calculate EV home-charging reimbursements. Updated quarterly (Jan/Apr/Jul/Oct).
+State: the **most recently published** official CREG 3-month average tariff in `c€/kWh`. Updated quarterly (Jan/Apr/Jul/Oct). Advances as soon as CREG publishes a new quarterly row — which can happen before the new quarter actually starts.
 
 Attributes:
 - `period_year` / `period_month` — the quarter-start month the average applies to
+
+### This Quarter sensors (`sensor.creg_tariff_*_this_quarter`)
+
+State: the CREG 3-month average for the **calendar quarter the HA clock is currently in** (c€/kWh). This is the value applicable to the current billing period and is safe to use in reimbursement automations without risk of jumping ahead. Returns `unknown` if CREG has not yet published the row for the current quarter.
+
+Attributes:
+- `period_year` / `period_month` — the quarter-start month of the current quarter
+
+**When to use which sensor:**
+- Use `*_avg_3m` if you always want the latest published value (e.g. informational dashboards).
+- Use `*_this_quarter` for reimbursement calculations — it stays stable within the current quarter even if CREG publishes future data early.
 
 ---
 

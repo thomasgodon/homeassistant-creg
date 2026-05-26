@@ -4,12 +4,14 @@ import csv
 import io
 import logging
 from dataclasses import dataclass
+from datetime import datetime
 
 import aiohttp
 
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.update_coordinator import TimestampDataUpdateCoordinator, UpdateFailed
+from homeassistant.util import dt as dt_util
 
 from .const import CSV_URL, DOMAIN, SCAN_INTERVAL
 
@@ -113,4 +115,25 @@ class CregCoordinator(TimestampDataUpdateCoordinator[list[MonthData]]):
             value = getattr(row, region).avg_3m
             if value is not None:
                 return Avg3mResult(value=value, year=row.year, month=row.month)
+        return None
+
+    def this_quarter_avg(self, region: str, now: datetime | None = None) -> Avg3mResult | None:
+        if not self.data:
+            return None
+        if now is None:
+            now = dt_util.now()
+        q_start = ((now.month - 1) // 3) * 3 + 1
+        # CREG publishes the rate for quarter Q in the CSV row 3 months before Q starts.
+        # E.g. the April row carries Q3 (Jul-Sep), the January row carries Q2 (Apr-Jun).
+        pub_month = q_start - 3
+        pub_year = now.year
+        if pub_month <= 0:
+            pub_month += 12
+            pub_year -= 1
+        for row in self.data:
+            if row.year == pub_year and row.month == pub_month:
+                value = getattr(row, region).avg_3m
+                if value is None:
+                    return None
+                return Avg3mResult(value=value, year=now.year, month=q_start)
         return None

@@ -34,6 +34,7 @@ async def async_setup_entry(
     for region in REGIONS:
         entities.append(CregPriceSensor(coordinator, region))
         entities.append(CregAvg3mSensor(coordinator, region))
+        entities.append(CregThisQuarterSensor(coordinator, region))
     entities.append(CregLastUpdatedSensor(coordinator))
     async_add_entities(entities)
 
@@ -100,6 +101,32 @@ class CregAvg3mSensor(CoordinatorEntity[CregCoordinator], SensorEntity):
     @property
     def extra_state_attributes(self) -> dict:
         result = self.coordinator.latest_avg_3m(self._region)
+        if result is None:
+            return {}
+        return {"period_year": result.year, "period_month": result.month}
+
+
+class CregThisQuarterSensor(CoordinatorEntity[CregCoordinator], SensorEntity):
+    _attr_state_class = SensorStateClass.MEASUREMENT
+    _attr_native_unit_of_measurement = UNIT
+    _attr_suggested_display_precision = 2
+    _attr_has_entity_name = False
+    _attr_device_info = _DEVICE_INFO
+
+    def __init__(self, coordinator: CregCoordinator, region: str) -> None:
+        super().__init__(coordinator)
+        self._region = region
+        self._attr_unique_id = f"creg_tariff_{region}_this_quarter"
+        self._attr_name = f"CREG Tariff {region.title()} This Quarter"
+
+    @property
+    def native_value(self) -> float | None:
+        result = self.coordinator.this_quarter_avg(self._region)
+        return result.value if result else None
+
+    @property
+    def extra_state_attributes(self) -> dict:
+        result = self.coordinator.this_quarter_avg(self._region)
         if result is None:
             return {}
         return {"period_year": result.year, "period_month": result.month}
